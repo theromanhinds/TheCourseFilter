@@ -1,10 +1,14 @@
 import React from 'react'
 import SubjectFilter from '../Filters/SubjectFilter'
 
-function FilterMenu() {
+function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
   return (
-    <div>
-        <h3>Filter Menu</h3>
+    <div className={`filter-menu ${isFilterMenuOpen ? 'open' : ''}`}>
+
+        <button className="filter-menu-toggle" onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
+          <span style={{ marginLeft: '0px' }}>&#9776;</span>
+        </button>
+        
         <SubjectFilter/>
 
     </div>

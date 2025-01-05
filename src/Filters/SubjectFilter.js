@@ -11,12 +11,12 @@ function SubjectFilter() {
   };
 
   return (
-    <div className="SearchFilterContainer">
+    <div className="search-filter">
       <p>Filter by Subject</p>
 
-      <div className="SearchBox">
+      <div className="search-box">
         <input
-          className="SearchBoxInput"
+          className="search-box-input"
           type="text"
           placeholder="Search subject"
           value={subjectSearch}
@@ -27,11 +27,11 @@ function SubjectFilter() {
       </div>
 
       {isDropdownOpen && (
-        <div className="DropdownContainer">
+        <div className="dropdown">
           {uniqueSubjects.filter((subject) =>
               subject.toLowerCase().includes(subjectSearch.toLowerCase())
             ).map((subject) => (
-              <div key={subject} className={`DropdownItem ${selectedSubjects.includes(subject) ? 'selected' : ''}`} onClick={() => { toggleSubject(subject); setSubjectSearch('');}}>
+              <div key={subject} className={`dropdown-item ${selectedSubjects.includes(subject) ? 'selected' : ''}`} onClick={() => { toggleSubject(subject); setSubjectSearch('');}}>
                 {subject}
               </div>
             ))}
@@ -39,9 +39,9 @@ function SubjectFilter() {
       )}
 
       {selectedSubjects.length > 0 && (
-        <div className="ActiveFilters">
+        <div className="active-filters">
           {selectedSubjects.map((subject) => (
-            <div key={subject} className="ActiveFilterTag" onClick={() => toggleSubject(subject)}>
+            <div key={subject} className="active-filter-tag" onClick={() => toggleSubject(subject)}>
               {subject} <span>&#10005;</span>
             </div>
           ))}

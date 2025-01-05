@@ -2,14 +2,25 @@ import React from 'react'
 import Course from './Course'
 import { useCourses } from './CourseContext'
 
-function CourseList() {
+function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
 
   const { filteredCourses, loading } = useCourses();
 
   if (loading) return <p>Loading courses...</p>;
 
   return (
-    <div>
+    <div className='course-list'>
+
+      <div className='header'> 
+        <button 
+          className="MobileFilterButtonCourses" 
+          onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
+          <span style={{ marginLeft: '0px' }}>&#9776;</span>
+        </button>
+
+        <h2>The Course Filter</h2>
+      </div>
+
       <h3>Course List | {filteredCourses.length} courses</h3>
 
        {filteredCourses.length > 0 ? (
