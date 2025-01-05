@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Course({ course}) {
+function Course({course}) {
   return (
     <div>{course.title}</div>
   )
