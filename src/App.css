@@ -70,6 +70,43 @@ width: 25%;
 
 /* =========================================== */
 
+.return-to-top {
+  position: fixed;
+  background-color: rgb(39, 39, 39);
+  color: white;
+  border: 3px solid black;
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  align-items: flex-start;
+  right: 20px;
+  bottom: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  z-index: 3;
+
+}
+
+.filter-menu-toggle {
+  position: absolute;
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+  align-items: flex-start;
+  left: 20px;
+  top: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .filter-menu {
   background-color: rgb(19, 19, 19);
   color: white;
@@ -144,7 +181,7 @@ width: 25%;
   outline: none;
 }
 
-.SearchBoxInput:focus {
+.search-box-input:focus {
   border: 0;
 }
 

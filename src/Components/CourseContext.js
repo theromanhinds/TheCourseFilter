@@ -9,6 +9,11 @@ const CourseContext = createContext();
 // Custom hook for easy access
 export const useCourses = () => useContext(CourseContext);
 
+// Helper function to extract numeric values from course numbers (e.g., "100A" -> 100)
+const extractNumber = (courseNum) => {
+  return parseInt(courseNum.replace(/\D/g, ''), 10);
+};
+
 // Provider component
 export const CourseProvider = ({ children }) => {
   const [courses, setCourses] = useState([]);
@@ -16,7 +21,6 @@ export const CourseProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   
-  // Keep a state for the selected subjects to control the toggling logic
   const [selectedSubjects, setSelectedSubjects] = useState(
     searchParams.get('subject')?.split(',') || []
   );
@@ -45,23 +49,40 @@ export const CourseProvider = ({ children }) => {
     fetchCourses();
   }, []);
 
-  // Filter courses based on selected subjects
-  const applyFilters = useCallback(() => {
+  // Apply filters and sorting to courses
+  const applyFiltersAndSort = useCallback(() => {
+    let filtered = courses;
+
+    // Apply subject filtering if subjects are selected
     if (selectedSubjects.length > 0) {
-      setFilteredCourses(
-        courses.filter((course) =>
-          selectedSubjects.includes(course.subject)
-        )
+      filtered = courses.filter((course) =>
+        selectedSubjects.includes(course.subject)
       );
-    } else {
-      setFilteredCourses(courses);  // Show all if no filters
     }
+
+    // Sort courses by subject alphabetically, and by course number if the subject is the same
+    const sorted = [...filtered];
+    sorted.sort((a, b) => {
+      const subjectCompare = a.subject.localeCompare(b.subject);
+      if (subjectCompare !== 0) return subjectCompare;
+
+      const numA = extractNumber(a.courseNum);
+      const numB = extractNumber(b.courseNum);
+
+      if (numA === numB) {
+        return a.courseNum.localeCompare(b.courseNum);  // If course numbers are the same, compare the alphanumeric parts
+      }
+
+      return numA - numB;  // Compare the numeric course numbers
+    });
+
+    setFilteredCourses(sorted);  // Update filtered courses after sorting
   }, [selectedSubjects, courses]);
 
-  // Trigger filter application whenever selectedSubjects change
+  // Trigger filter and sort whenever selectedSubjects or courses change
   useEffect(() => {
-    applyFilters();
-  }, [selectedSubjects, applyFilters]);
+    applyFiltersAndSort();
+  }, [selectedSubjects, courses, applyFiltersAndSort]);
 
   // Toggle subject and update URL
   const toggleSubject = (subject) => {
@@ -74,12 +95,17 @@ export const CourseProvider = ({ children }) => {
       if (updatedSubjects.length > 0) {
         setSearchParams({ subject: updatedSubjects.join(',') }, { replace: true });
       } else {
-        // Remove the subject parameter from the URL when there are no selected subjects
         setSearchParams({}, { replace: true });
       }
   
       return updatedSubjects;  // Return updated subjects
     });
+  };
+
+  const clearFilters = () => {
+    setSearchParams({}, { replace: true });  // Clears all query parameters
+    setSelectedSubjects([]);  // Clear selected subjects
+    setFilteredCourses(courses);  // Show all courses when filters are cleared
   };
 
   return (
@@ -91,6 +117,7 @@ export const CourseProvider = ({ children }) => {
         uniqueSubjects,
         selectedSubjects,
         toggleSubject,
+        clearFilters,
       }}
     >
       {children}

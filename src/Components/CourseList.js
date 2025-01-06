@@ -6,6 +6,10 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
 
   const { filteredCourses, loading } = useCourses();
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (loading) return <p>Loading courses...</p>;
 
   return (
@@ -13,7 +17,7 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
 
       <div className='header'> 
         <button 
-          className="MobileFilterButtonCourses" 
+          className="filter-menu-toggle" 
           onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
           <span style={{ marginLeft: '0px' }}>&#9776;</span>
         </button>
@@ -21,7 +25,7 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
         <h2>The Course Filter</h2>
       </div>
 
-      <h3>Course List | {filteredCourses.length} courses</h3>
+      <h3>{filteredCourses.length} courses</h3>
 
        {filteredCourses.length > 0 ? (
         filteredCourses.map((course) => (
@@ -30,6 +34,10 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
       ) : (
         <p>No courses match the selected filters.</p>
       )}
+
+      <button className='return-to-top' onClick={scrollToTop}>
+        Scroll to Top
+      </button>
 
     </div>
   )

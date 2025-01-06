@@ -1,7 +1,11 @@
 import React from 'react'
 import SubjectFilter from '../Filters/SubjectFilter'
+import { useCourses } from './CourseContext';
 
 function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
+
+  const { clearFilters } = useCourses();
+
   return (
     <div className={`filter-menu ${isFilterMenuOpen ? 'open' : ''}`}>
 
@@ -10,6 +14,8 @@ function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
         </button>
         
         <SubjectFilter/>
+
+        <button onClick={clearFilters}>Clear Filters</button>
 
     </div>
   )
