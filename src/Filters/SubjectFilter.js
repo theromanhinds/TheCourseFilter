@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCourses } from '../Components/CourseContext';
 
 function SubjectFilter() {
-  const { selectedSubjects, uniqueSubjects, toggleSubject } = useCourses();
+  const { selectedSubjects, uniqueSubjects, toggleFilter } = useCourses();
   const [subjectSearch, setSubjectSearch] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -31,7 +31,8 @@ function SubjectFilter() {
           {uniqueSubjects.filter((subject) =>
               subject.toLowerCase().includes(subjectSearch.toLowerCase())
             ).map((subject) => (
-              <div key={subject} className={`dropdown-item ${selectedSubjects.includes(subject) ? 'selected' : ''}`} onClick={() => { toggleSubject(subject); setSubjectSearch('');}}>
+              <div key={subject} className={`dropdown-item ${selectedSubjects.includes(subject) ? 'selected' : ''}`} 
+                    onClick={() => toggleFilter('subject', subject)}>
                 {subject}
               </div>
             ))}
@@ -41,7 +42,8 @@ function SubjectFilter() {
       {selectedSubjects.length > 0 && (
         <div className="active-filters">
           {selectedSubjects.map((subject) => (
-            <div key={subject} className="active-filter-tag" onClick={() => toggleSubject(subject)}>
+            <div key={subject} className="active-filter-tag" 
+                  onClick={() => toggleFilter('subject', subject)}>
               {subject} <span>&#10005;</span>
             </div>
           ))}

@@ -21,11 +21,13 @@ export const CourseProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   
-  const [selectedSubjects, setSelectedSubjects] = useState(
-    searchParams.get('subject')?.split(',') || []
-  );
+  const [selectedSubjects, setSelectedSubjects] = useState(searchParams.get('subject')?.split(',') || []);
+  const [selectedTimes, setSelectedTimes] = useState(searchParams.get('time')?.split(',') || []);
+  const [selectedInstructors, setSelectedInstructors] = useState(searchParams.get('instructor')?.split(',') || []);
 
   const uniqueSubjects = [...new Set(courses.map((course) => course.subject))].sort();
+  const uniqueTimes = [...new Set(courses.map((course) => course.times).filter((time) => time))];
+  const uniqueInstructors = [...new Set(courses.map((course) => course.instructor))].sort();
 
   // Fetch courses from Firestore
   useEffect(() => {
@@ -60,6 +62,16 @@ export const CourseProvider = ({ children }) => {
       );
     }
 
+    // Apply time filtering if times are selected
+    if (selectedTimes.length > 0) {
+      filtered = filtered.filter((course) => selectedTimes.includes(course.time));
+    }
+
+    // Apply instructor filtering if instructors are selected
+    if (selectedInstructors.length > 0) {
+      filtered = filtered.filter((course) => selectedInstructors.includes(course.instructor));
+    }
+
     // Sort courses by subject alphabetically, and by course number if the subject is the same
     const sorted = [...filtered];
     sorted.sort((a, b) => {
@@ -77,35 +89,86 @@ export const CourseProvider = ({ children }) => {
     });
 
     setFilteredCourses(sorted);  // Update filtered courses after sorting
-  }, [selectedSubjects, courses]);
+  }, [selectedSubjects, selectedTimes, selectedInstructors, courses]);
 
   // Trigger filter and sort whenever selectedSubjects or courses change
   useEffect(() => {
     applyFiltersAndSort();
-  }, [selectedSubjects, courses, applyFiltersAndSort]);
+  }, [selectedSubjects, selectedTimes, selectedInstructors, courses, applyFiltersAndSort]);
 
-  // Toggle subject and update URL
-  const toggleSubject = (subject) => {
-    setSelectedSubjects((prevSubjects) => {
-      const updatedSubjects = prevSubjects.includes(subject)
-        ? prevSubjects.filter((s) => s !== subject)
-        : [...prevSubjects, subject];
+  // Toggle filter for subject, time, or instructor and update URL
+  const toggleFilter = (filterType, value) => {
+    let selectedFilter;
+    let setSelectedFilter;
+
+    // Select the corresponding state and setState function
+    if (filterType === 'subject') {
+      selectedFilter = selectedSubjects;
+      setSelectedFilter = setSelectedSubjects;
+    } else if (filterType === 'time') {
+      selectedFilter = selectedTimes;
+      setSelectedFilter = setSelectedTimes;
+    } else if (filterType === 'instructor') {
+      selectedFilter = selectedInstructors;
+      setSelectedFilter = setSelectedInstructors;
+    }
+
+    setSelectedFilter((prevFilters) => {
+      const updatedFilters = prevFilters.includes(value)
+        ? prevFilters.filter((s) => s !== value)
+        : [...prevFilters, value];
       
-      // Update the URL: If no subjects are selected, remove the 'subject' param
-      if (updatedSubjects.length > 0) {
-        setSearchParams({ subject: updatedSubjects.join(',') }, { replace: true });
+      // Update the URL with the updated filter value
+      const updatedParams = new URLSearchParams(searchParams);
+      updatedParams.set(filterType, updatedFilters.join(','));
+
+      if (updatedFilters.length > 0) {
+        setSearchParams(updatedParams, { replace: true });
       } else {
-        setSearchParams({}, { replace: true });
+        updatedParams.delete(filterType);
+        setSearchParams(updatedParams, { replace: true });
       }
-  
-      return updatedSubjects;  // Return updated subjects
+
+      return updatedFilters;  // Return updated filters
     });
   };
 
+  // Helper function to convert time to 24-hour format
+  function to24Hour(time) {
+    if (!time) return 0;  // Safeguard for null/undefined
+    let [hour, minute] = time.match(/\d+/g);
+    const period = time.slice(-2);
+    
+    hour = parseInt(hour);
+    minute = parseInt(minute);
+  
+    if (period === 'pm' && hour !== 12) hour += 12;
+    if (period === 'am' && hour === 12) hour = 0;
+  
+    return hour * 60 + minute;  // Convert to total minutes
+  }
+  
+  // Custom sort for unique times (checks start and end times)
+  const sortedTimes = uniqueTimes.sort((a, b) => {
+    const [startA, endA] = a.split('-');
+    const [startB, endB] = b.split('-');
+  
+    const startComparison = to24Hour(startA) - to24Hour(startB);
+    
+    // If start times are equal, compare end times
+    if (startComparison === 0) {
+      return to24Hour(endA) - to24Hour(endB);
+    }
+  
+    return startComparison;
+  });
+
   const clearFilters = () => {
     setSearchParams({}, { replace: true });  // Clears all query parameters
-    setSelectedSubjects([]);  // Clear selected subjects
-    setFilteredCourses(courses);  // Show all courses when filters are cleared
+    setSelectedSubjects([]);
+    setSelectedTimes([]);
+    setSelectedInstructors([]);
+    setFilteredCourses(courses);  // Reset the filtered courses
   };
 
   return (
@@ -115,8 +178,12 @@ export const CourseProvider = ({ children }) => {
         filteredCourses,
         loading,
         uniqueSubjects,
+        uniqueTimes,
+        uniqueInstructors,
         selectedSubjects,
-        toggleSubject,
+        selectedTimes,
+        selectedInstructors,
+        toggleFilter,
         clearFilters,
       }}
     >

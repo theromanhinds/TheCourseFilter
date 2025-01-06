@@ -1,6 +1,7 @@
 import React from 'react'
 import SubjectFilter from '../Filters/SubjectFilter'
 import { useCourses } from './CourseContext';
+import TimeFilter from '../Filters/TimeFilter';
 
 function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
 
@@ -14,6 +15,7 @@ function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
         </button>
         
         <SubjectFilter/>
+        <TimeFilter/>
 
         <button onClick={clearFilters}>Clear Filters</button>
 
