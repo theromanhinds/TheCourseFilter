@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useCourses } from '../Components/CourseContext';
 
-function TimeFilter() {
+function MobileTimeFilter() {
 
   const { uniqueTimes, selectedTimes, toggleFilter } = useCourses();
   const [timeSearch, setTimeSearch] = useState('');
@@ -14,7 +14,9 @@ function TimeFilter() {
    
      return (
        <div className="search-filter">
-      
+   
+         <p>Filter by Time</p>
+   
          {/* SEARCH BOX */}
          <div className="search-box">
            <input
@@ -52,7 +54,7 @@ function TimeFilter() {
          {/* DROP DOWN MENU */}
    
          {/* ACTIVE FILTERS */}
-         {/* {selectedTimes.length > 0 && (
+         {selectedTimes.length > 0 && (
            <div className="active-filters">
              {selectedTimes.map((time) => (
                <div
@@ -63,11 +65,11 @@ function TimeFilter() {
                </div>
              ))}
            </div>
-         )} */}
+         )}
          {/* ACTIVE FILTERS */}
    
        </div>
      );
    }
 
-export default TimeFilter
+export default MobileTimeFilter

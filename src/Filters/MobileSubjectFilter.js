@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCourses } from '../Components/CourseContext';
 
-function SubjectFilter() {
+function MobileSubjectFilter() {
   const { selectedSubjects, uniqueSubjects, toggleFilter } = useCourses();
   const [subjectSearch, setSubjectSearch] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -14,6 +14,7 @@ function SubjectFilter() {
     <div className="search-filter">
 
       <div className="search-box">
+        <p>Filter by Subject</p>
         <input
           className="search-box-input"
           type="text"
@@ -41,7 +42,7 @@ function SubjectFilter() {
         </div>
       )}
 
-      {/* {selectedSubjects.length > 0 && (
+      {selectedSubjects.length > 0 && (
         <div className="active-filters">
           {selectedSubjects.map((subject) => (
             <div key={subject} className="active-filter-tag" 
@@ -50,10 +51,10 @@ function SubjectFilter() {
             </div>
           ))}
         </div>
-      )} */}
+      )}
 
     </div>
   );
 }
 
-export default SubjectFilter;
+export default MobileSubjectFilter;

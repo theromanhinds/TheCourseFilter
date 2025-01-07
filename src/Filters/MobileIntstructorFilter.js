@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useCourses } from '../Components/CourseContext';
 
-function InstructorFilter() {
+function MobileInstructorFilter() {
 
     const { selectedInstructors, uniqueInstructors, toggleFilter } = useCourses();
     const [instructorSearch, setInstructorSearch] = useState('');
@@ -17,6 +17,8 @@ function InstructorFilter() {
 
   return (
     <div className="search-filter">
+
+      <p>Filter by Instructor</p>
 
       {/* SEARCH BOX */}
       <div className="search-box">
@@ -54,7 +56,7 @@ function InstructorFilter() {
       {/* DROP DOWN MENU */}
 
       {/* ACTIVE FILTERS */}
-      {/* {selectedInstructors.length > 0 && (
+      {selectedInstructors.length > 0 && (
         <div className="active-filters">
           {selectedInstructors.map((instructor) => (
             <div
@@ -66,11 +68,11 @@ function InstructorFilter() {
             </div>
           ))}
         </div>
-      )} */}
+      )}
       {/* ACTIVE FILTERS */}
 
     </div>
   );
 }
 
-export default InstructorFilter
+export default MobileInstructorFilter

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Header from './Header';
 import Course from './Course'
 import { useCourses } from './CourseContext'
 import CoursePopup from './CoursePopup';
@@ -17,17 +18,7 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
   return (
     <div className='course-list'>
 
-      <div className='header'> 
-        <button 
-          className="filter-menu-toggle" 
-          onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
-          <span style={{ marginLeft: '0px' }}>&#9776;</span>
-        </button>
-
-        <h2>The Course Filter</h2>
-      </div>
-
-      <h3>{filteredCourses.length} courses</h3>
+      <Header/>
 
         {popupCourse && (
           <CoursePopup 
