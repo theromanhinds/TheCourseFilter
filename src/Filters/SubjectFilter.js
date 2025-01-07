@@ -31,8 +31,11 @@ function SubjectFilter() {
           {uniqueSubjects.filter((subject) =>
               subject.toLowerCase().includes(subjectSearch.toLowerCase())
             ).map((subject) => (
-              <div key={subject} className={`dropdown-item ${selectedSubjects.includes(subject) ? 'selected' : ''}`} 
-                    onClick={() => toggleFilter('subject', subject)}>
+              <div key={subject} className={`dropdown-item`} 
+                    onClick={() => {
+                      toggleFilter('subject', subject);
+                      setSubjectSearch('');
+                    }}>
                 {subject}
               </div>
             ))}

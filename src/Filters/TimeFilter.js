@@ -4,39 +4,23 @@ import { useCourses } from '../Components/CourseContext';
 
 function TimeFilter() {
 
-  const { uniqueTimes, selectedTimes, setSelectedTimes, toggleFilter } = useCourses();
-
-  // Handles state of text in the search field.
+  const { uniqueTimes, selectedTimes, toggleFilter } = useCourses();
   const [timeSearch, setTimeSearch] = useState('');
-  // Controls the open and closing of dropdown menu.
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Handles text field input change
   const handleSearchChange = (e) => {
     setTimeSearch(e.target.value);
   };
-
-  // Handles time selection or deselection
-  const handleTimeSelect = (time) => {
-    setSelectedTimes((prevSelectedTimes) => {
-      if (prevSelectedTimes.includes(time)) {
-        return prevSelectedTimes.filter((s) => s !== time);
-      } else {
-        return [...prevSelectedTimes, time];
-      }
-    });
-    setTimeSearch('');
-  };
    
      return (
-       <div className="SearchFilterContainer">
+       <div className="search-filter">
    
          <p>Filter by Time</p>
    
          {/* SEARCH BOX */}
-         <div className="SearchBox">
+         <div className="search-box">
            <input
-             className='SearchBoxInput'
+             className='search-box-input'
              type="text"
              placeholder="8:00am"
              maxLength={"15"}
@@ -49,35 +33,34 @@ function TimeFilter() {
          {/* SEARCH BOX */}
    
          {/* DROP DOWN MENU */}
-         {isDropdownOpen && ( <div className="DropdownContainer">
-   
-             <div className="DropdownList">
-   
+         {isDropdownOpen && ( 
+          
+          <div className="dropdown">
                {uniqueTimes.filter((time) =>
                  time.includes(timeSearch)
                  ).map((time) => ( 
                    
-                   <div key={time} className="DropdownItem"
-                        onClick={() => toggleFilter('time', time)}>
+                   <div key={time} className="dropdown-item"
+                    onClick={() => {
+                      toggleFilter('time', time);
+                      setTimeSearch('');
+                    }}>
                      {time} 
                    </div>
    
                ))}
-   
-             </div>
-   
+      
          </div>)}
          {/* DROP DOWN MENU */}
    
          {/* ACTIVE FILTERS */}
          {selectedTimes.length > 0 && (
-           <div className="ActiveFilters">
+           <div className="active-filters">
              {selectedTimes.map((time) => (
                <div
                  key={time}
-                 className="ActiveFilterTag"
-                 onClick={() => toggleFilter('time', time)}
-               >
+                 className="active-filter-tag"
+                 onClick={() => toggleFilter('time', time)}>
                  {time} <span style={{ marginLeft: '5px' }}>&#10005;</span>
                </div>
              ))}

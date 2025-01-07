@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { db } from '../Firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useSearchParams } from 'react-router-dom';
@@ -51,89 +51,71 @@ export const CourseProvider = ({ children }) => {
     fetchCourses();
   }, []);
 
-  // Apply filters and sorting to courses
-  const applyFiltersAndSort = useCallback(() => {
-    let filtered = courses;
-
-    // Apply subject filtering if subjects are selected
-    if (selectedSubjects.length > 0) {
-      filtered = courses.filter((course) =>
-        selectedSubjects.includes(course.subject)
-      );
-    }
-
-    // Apply time filtering if times are selected
-    if (selectedTimes.length > 0) {
-      filtered = filtered.filter((course) => selectedTimes.includes(course.time));
-    }
-
-    // Apply instructor filtering if instructors are selected
-    if (selectedInstructors.length > 0) {
-      filtered = filtered.filter((course) => selectedInstructors.includes(course.instructor));
-    }
-
-    // Sort courses by subject alphabetically, and by course number if the subject is the same
-    const sorted = [...filtered];
-    sorted.sort((a, b) => {
-      const subjectCompare = a.subject.localeCompare(b.subject);
-      if (subjectCompare !== 0) return subjectCompare;
-
-      const numA = extractNumber(a.courseNum);
-      const numB = extractNumber(b.courseNum);
-
-      if (numA === numB) {
-        return a.courseNum.localeCompare(b.courseNum);  // If course numbers are the same, compare the alphanumeric parts
-      }
-
-      return numA - numB;  // Compare the numeric course numbers
-    });
-
-    setFilteredCourses(sorted);  // Update filtered courses after sorting
-  }, [selectedSubjects, selectedTimes, selectedInstructors, courses]);
-
-  // Trigger filter and sort whenever selectedSubjects or courses change
-  useEffect(() => {
-    applyFiltersAndSort();
-  }, [selectedSubjects, selectedTimes, selectedInstructors, courses, applyFiltersAndSort]);
-
-  // Toggle filter for subject, time, or instructor and update URL
   const toggleFilter = (filterType, value) => {
-    let selectedFilter;
     let setSelectedFilter;
-
-    // Select the corresponding state and setState function
+  
     if (filterType === 'subject') {
-      selectedFilter = selectedSubjects;
       setSelectedFilter = setSelectedSubjects;
     } else if (filterType === 'time') {
-      selectedFilter = selectedTimes;
       setSelectedFilter = setSelectedTimes;
     } else if (filterType === 'instructor') {
-      selectedFilter = selectedInstructors;
       setSelectedFilter = setSelectedInstructors;
     }
-
+  
     setSelectedFilter((prevFilters) => {
       const updatedFilters = prevFilters.includes(value)
         ? prevFilters.filter((s) => s !== value)
         : [...prevFilters, value];
-      
-      // Update the URL with the updated filter value
+  
+      // Update URL params
       const updatedParams = new URLSearchParams(searchParams);
       updatedParams.set(filterType, updatedFilters.join(','));
-
+      
       if (updatedFilters.length > 0) {
         setSearchParams(updatedParams, { replace: true });
       } else {
         updatedParams.delete(filterType);
         setSearchParams(updatedParams, { replace: true });
       }
-
-      return updatedFilters;  // Return updated filters
+  
+      // Apply filters immediately using the updated filters
+      applyFiltersAndSortWithParams({
+        subjects: filterType === 'subject' ? updatedFilters : selectedSubjects,
+        times: filterType === 'time' ? updatedFilters : selectedTimes,
+        instructors: filterType === 'instructor' ? updatedFilters : selectedInstructors,
+      });
+  
+      return updatedFilters;
     });
   };
+  
+  // New function to apply filters using params directly
+  const applyFiltersAndSortWithParams = ({ subjects, times, instructors }) => {
+    let filtered = courses;
+  
+    if (subjects.length > 0) {
+      filtered = filtered.filter((course) => subjects.includes(course.subject));
+    }
+  
+    if (times.length > 0) {
 
-  // Helper function to convert time to 24-hour format
+      filtered = filtered.filter((course) => times.includes(course.times));
+    }
+  
+    if (instructors.length > 0) {
+      filtered = filtered.filter((course) => instructors.includes(course.instructor));
+    }
+  
+    const sorted = [...filtered].sort((a, b) => {
+      const subjectCompare = a.subject.localeCompare(b.subject);
+      if (subjectCompare !== 0) return subjectCompare;
+      return extractNumber(a.courseNum) - extractNumber(b.courseNum);
+    });
+  
+    setFilteredCourses(sorted);
+  };
+
+  // // Helper function to convert time to 24-hour format
   function to24Hour(time) {
     if (!time) return 0;  // Safeguard for null/undefined
     let [hour, minute] = time.match(/\d+/g);
@@ -149,7 +131,7 @@ export const CourseProvider = ({ children }) => {
   }
   
   // Custom sort for unique times (checks start and end times)
-  const sortedTimes = uniqueTimes.sort((a, b) => {
+  uniqueTimes.sort((a, b) => {
     const [startA, endA] = a.split('-');
     const [startB, endB] = b.split('-');
   

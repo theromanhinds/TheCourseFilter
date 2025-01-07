@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Course({course}) {
+function Course({course, displayPopup}) {
   return (
-    <div className='course'>
+    <div className='course' onClick={displayPopup}>
       <div className='subject-number'>
         <h3>{course.subject ? course.subject : "___"}</h3> 
         <p>{course.courseNum ? course.courseNum : "___"}</p>
