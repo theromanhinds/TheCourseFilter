@@ -17,7 +17,7 @@ function SubjectFilter() {
         <input
           className="search-box-input"
           type="text"
-          placeholder="Search subject"
+          placeholder="Subject"
           value={subjectSearch}
           onChange={handleSearchChange}
           onFocus={() => setIsDropdownOpen(true)}
@@ -41,7 +41,7 @@ function SubjectFilter() {
         </div>
       )}
 
-      {/* {selectedSubjects.length > 0 && (
+      {selectedSubjects.length > 0 && (
         <div className="active-filters">
           {selectedSubjects.map((subject) => (
             <div key={subject} className="active-filter-tag" 
@@ -50,7 +50,7 @@ function SubjectFilter() {
             </div>
           ))}
         </div>
-      )} */}
+      )}
 
     </div>
   );

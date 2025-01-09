@@ -23,7 +23,7 @@ function InstructorFilter() {
         <input
           className='search-box-input'
           type="text"
-          placeholder="Murphy"
+          placeholder="Instructor"
           maxLength={"30"}
           value={instructorSearch}
           onChange={handleSearchChange}

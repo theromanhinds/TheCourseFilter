@@ -20,7 +20,7 @@ function TimeFilter() {
            <input
              className='search-box-input'
              type="text"
-             placeholder="8:00am"
+             placeholder="Time"
              maxLength={"15"}
              value={timeSearch}
              onChange={handleSearchChange}
