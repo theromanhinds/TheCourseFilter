@@ -19,8 +19,7 @@ function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
         <TimeFilter/>
         <InstructorFilter/>
 
-        <button onClick={clearFilters}>Clear Filters</button>
-
+          <button onClick={clearFilters}>Clear Filters</button>
     </div>
   )
 }

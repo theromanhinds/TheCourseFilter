@@ -18,8 +18,6 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
   return (
     <div className='course-list'>
 
-      <Header/>
-
         {popupCourse && (
           <CoursePopup 
             popupCourse={popupCourse}

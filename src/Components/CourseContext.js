@@ -24,10 +24,16 @@ export const CourseProvider = ({ children }) => {
   const [selectedSubjects, setSelectedSubjects] = useState(searchParams.get('subject')?.split(',') || []);
   const [selectedTimes, setSelectedTimes] = useState(searchParams.get('time')?.split(',') || []);
   const [selectedInstructors, setSelectedInstructors] = useState(searchParams.get('instructor')?.split(',') || []);
+  const [selectedDays, setSelectedDays] = useState(searchParams.get('days')?.split(',') || []);
+  const [selectedDistSimple, setSelectedDistSimple] = useState(searchParams.get('distSimple')?.split(',') || []);
 
   const uniqueSubjects = [...new Set(courses.map((course) => course.subject))].sort();
   const uniqueTimes = [...new Set(courses.map((course) => course.times).filter((time) => time))];
   const uniqueInstructors = [...new Set(courses.map((course) => course.instructor))].sort();
+  // const uniqueDays = [...new Set(courses.map((course) => course.days))].sort();
+  const uniqueDays = ['M', 'T', 'W', 'R', 'F', 'MWF', 'TR', 'MW', 'MF', 'WF']
+  // const uniqueDistSimple = [...new Set(courses.map((course) => course.distSimple))].sort();
+  const uniqueDistSimple = ['HU', 'NS', 'SS'];
 
   // Fetch courses from Firestore
   useEffect(() => {
@@ -54,13 +60,11 @@ export const CourseProvider = ({ children }) => {
   const toggleFilter = (filterType, value) => {
     let setSelectedFilter;
   
-    if (filterType === 'subject') {
-      setSelectedFilter = setSelectedSubjects;
-    } else if (filterType === 'time') {
-      setSelectedFilter = setSelectedTimes;
-    } else if (filterType === 'instructor') {
-      setSelectedFilter = setSelectedInstructors;
-    }
+    if (filterType === 'subject') setSelectedFilter = setSelectedSubjects;
+    else if (filterType === 'time') setSelectedFilter = setSelectedTimes;
+    else if (filterType === 'instructor') setSelectedFilter = setSelectedInstructors;
+    else if (filterType === 'days') setSelectedFilter = setSelectedDays;
+    else if (filterType === 'distSimple') setSelectedFilter = setSelectedDistSimple;
   
     setSelectedFilter((prevFilters) => {
       const updatedFilters = prevFilters.includes(value)
@@ -83,6 +87,8 @@ export const CourseProvider = ({ children }) => {
         subjects: filterType === 'subject' ? updatedFilters : selectedSubjects,
         times: filterType === 'time' ? updatedFilters : selectedTimes,
         instructors: filterType === 'instructor' ? updatedFilters : selectedInstructors,
+        days: filterType === 'days' ? updatedFilters : selectedDays,
+        distSimple: filterType === 'distSimple' ? updatedFilters : selectedDistSimple,
       });
   
       return updatedFilters;
@@ -90,21 +96,14 @@ export const CourseProvider = ({ children }) => {
   };
   
   // New function to apply filters using params directly
-  const applyFiltersAndSortWithParams = ({ subjects, times, instructors }) => {
+  const applyFiltersAndSortWithParams = ({ subjects, times, instructors, days, distSimple }) => {
     let filtered = courses;
   
-    if (subjects.length > 0) {
-      filtered = filtered.filter((course) => subjects.includes(course.subject));
-    }
-  
-    if (times.length > 0) {
-
-      filtered = filtered.filter((course) => times.includes(course.times));
-    }
-  
-    if (instructors.length > 0) {
-      filtered = filtered.filter((course) => instructors.includes(course.instructor));
-    }
+    if (subjects.length > 0) filtered = filtered.filter((course) => subjects.includes(course.subject));
+    if (times.length > 0) filtered = filtered.filter((course) => times.includes(course.times));
+    if (instructors.length > 0) filtered = filtered.filter((course) => instructors.includes(course.instructor));
+    if (days.length > 0) filtered = filtered.filter((course) => days.includes(course.days));
+    if (distSimple.length > 0) filtered = filtered.filter((course) => distSimple.includes(course.distSimple));
   
     const sorted = [...filtered].sort((a, b) => {
       const subjectCompare = a.subject.localeCompare(b.subject);
@@ -150,6 +149,8 @@ export const CourseProvider = ({ children }) => {
     setSelectedSubjects([]);
     setSelectedTimes([]);
     setSelectedInstructors([]);
+    setSelectedDays([]);
+    setSelectedDistSimple([]);
     setFilteredCourses(courses);  // Reset the filtered courses
   };
 
@@ -162,9 +163,13 @@ export const CourseProvider = ({ children }) => {
         uniqueSubjects,
         uniqueTimes,
         uniqueInstructors,
+        uniqueDays,
+        uniqueDistSimple,
         selectedSubjects,
         selectedTimes,
         selectedInstructors,
+        selectedDays,
+        selectedDistSimple,
         toggleFilter,
         clearFilters,
       }}

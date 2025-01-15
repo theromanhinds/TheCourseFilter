@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCourses } from '../Components/CourseContext';
 
-function InstructorFilter() {
-  const { selectedInstructors, uniqueInstructors, toggleFilter } = useCourses();
+function DistFilter() {
+  const { uniqueDistSimple, selectedDistSimple, toggleFilter } = useCourses();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -20,41 +19,30 @@ function InstructorFilter() {
       }
     };
 
-    if (isDropdownOpen) {
-      document.addEventListener('click', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+    if (isDropdownOpen) document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [isDropdownOpen]);
 
   return (
     <div className="dropdown-filter">
-      {/* Button to toggle dropdown */}
       <button
         ref={buttonRef}
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         className="dropdown-button"
       >
-        Instructor
+        Dist
       </button>
-
-      {/* Dropdown menu */}
       {isDropdownOpen && (
         <div ref={dropdownRef} className="dropdown-menu">
-          {uniqueInstructors.map((instructor) => (
+          {uniqueDistSimple.map((dist) => (
             <div
-              key={instructor}
-              className={`dropdown-item ${
-                selectedInstructors.includes(instructor) ? 'selected' : ''
-              }`}
-              onClick={() => toggleFilter('instructor', instructor)}
+              key={dist}
+              className={`dropdown-item ${selectedDistSimple.includes(dist) ? 'selected' : ''}`}
+              onClick={() => toggleFilter('distSimple', dist)}
             >
-              {instructor}
-              {selectedInstructors.includes(instructor) && (
-            <span className="checkmark">&#10003;</span>
-          )}
+              {dist}
+              {selectedDistSimple.includes(dist) && <span className="checkmark">&#10003;</span>}
+
             </div>
           ))}
         </div>
@@ -63,4 +51,4 @@ function InstructorFilter() {
   );
 }
 
-export default InstructorFilter;
+export default DistFilter;
