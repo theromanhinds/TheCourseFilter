@@ -36,7 +36,7 @@ function TimeFilter() {
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         className="dropdown-button"
       >
-        Time
+        Time {selectedTimes.length > 0 && ` (${selectedTimes.length})`}
       </button>
 
       {isDropdownOpen && (

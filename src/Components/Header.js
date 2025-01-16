@@ -32,16 +32,17 @@ function Header() {
             <InstructorFilter/>
             <DayFilter/>
             <DistFilter/>
+
+            <div className='dropwdown-filter'>
+              <button className='dropdown-button' onClick={clearFilters}>Clear</button>
+            </div>
         </div>
 
         <div className='toggle-filters-container'>
-            <WritingFilter/>
-            <FirstYearFilter/>
-            <FavoriteFilter/>
+          <FavoriteFilter/>
+          <WritingFilter/>
+          <FirstYearFilter/>
             
-            <div className='toggle-filter'>
-              <button className='toggle-button' onClick={clearFilters}>Clear</button>
-            </div>
         </div>
         
       </div>

@@ -30,7 +30,7 @@ function DistFilter() {
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         className="dropdown-button"
       >
-        Dist
+        Dist {selectedDistSimple.length > 0 && ` (${selectedDistSimple.length})`}
       </button>
       {isDropdownOpen && (
         <div ref={dropdownRef} className="dropdown-menu">

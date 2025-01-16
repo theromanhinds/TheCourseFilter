@@ -37,7 +37,7 @@ function InstructorFilter() {
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         className="dropdown-button"
       >
-        Instructor
+        Instructor {selectedInstructors.length > 0 && ` (${selectedInstructors.length})`}
       </button>
 
       {/* Dropdown menu */}

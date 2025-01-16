@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Header from './Header';
 import Course from './Course'
 import { useCourses } from './CourseContext'
 import CoursePopup from './CoursePopup';

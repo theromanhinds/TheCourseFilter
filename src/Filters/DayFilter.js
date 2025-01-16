@@ -30,7 +30,7 @@ function DayFilter() {
         onClick={() => setIsDropdownOpen((prev) => !prev)}
         className="dropdown-button"
       >
-        Days
+        Days {selectedDays.length > 0 && ` (${selectedDays.length})`}
       </button>
       {isDropdownOpen && (
         <div ref={dropdownRef} className="dropdown-menu">

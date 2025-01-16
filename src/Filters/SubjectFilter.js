@@ -86,7 +86,7 @@ function SubjectFilter() {
     Subject 
 
     {/* DISPLAYS NUMBER OF SUBJECTS SELECTED */}
-    {/* {selectedSubjects.length > 0 && `(${selectedSubjects.length})`} */}
+    {selectedSubjects.length > 0 && ` (${selectedSubjects.length})`}
     
   </button>
 

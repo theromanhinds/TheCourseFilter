@@ -45,17 +45,67 @@ export const CourseProvider = ({ children }) => {
           courseId: doc.id,
           ...doc.data(),
         }));
-        setCourses(coursesList);
-        setFilteredCourses(coursesList);  // Initially show all courses
+  
+        const sortedCourses = coursesList.sort((a, b) => {
+          const subjectCompare = a.subject.localeCompare(b.subject);
+          if (subjectCompare !== 0) return subjectCompare;
+          return extractNumber(a.courseNum) - extractNumber(b.courseNum);
+        });
+  
+        setCourses(sortedCourses);
+  
+        // Apply filters based on initial URL parameters
+        const initialSubjects = searchParams.get('subject')?.split(',') || [];
+        const initialTimes = searchParams.get('time')?.split(',') || [];
+        const initialInstructors = searchParams.get('instructor')?.split(',') || [];
+        const initialDays = searchParams.get('days')?.split(',') || [];
+        const initialDistSimple = searchParams.get('distSimple')?.split(',') || [];
+  
+        applyFiltersAndSortWithParams({
+          subjects: initialSubjects,
+          times: initialTimes,
+          instructors: initialInstructors,
+          days: initialDays,
+          distSimple: initialDistSimple,
+        });
+  
+        setSelectedSubjects(initialSubjects);
+        setSelectedTimes(initialTimes);
+        setSelectedInstructors(initialInstructors);
+        setSelectedDays(initialDays);
+        setSelectedDistSimple(initialDistSimple);
       } catch (error) {
         console.error('Error fetching courses:', error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchCourses();
   }, []);
+  
+  useEffect(() => {
+    // Listen for changes in searchParams and update filters
+    const subjects = searchParams.get('subject')?.split(',') || [];
+    const times = searchParams.get('time')?.split(',') || [];
+    const instructors = searchParams.get('instructor')?.split(',') || [];
+    const days = searchParams.get('days')?.split(',') || [];
+    const distSimple = searchParams.get('distSimple')?.split(',') || [];
+  
+    setSelectedSubjects(subjects);
+    setSelectedTimes(times);
+    setSelectedInstructors(instructors);
+    setSelectedDays(days);
+    setSelectedDistSimple(distSimple);
+  
+    applyFiltersAndSortWithParams({
+      subjects,
+      times,
+      instructors,
+      days,
+      distSimple,
+    });
+  }, [courses]);
 
   const toggleFilter = (filterType, value) => {
     let setSelectedFilter;
@@ -105,13 +155,7 @@ export const CourseProvider = ({ children }) => {
     if (days.length > 0) filtered = filtered.filter((course) => days.includes(course.days));
     if (distSimple.length > 0) filtered = filtered.filter((course) => distSimple.includes(course.distSimple));
   
-    const sorted = [...filtered].sort((a, b) => {
-      const subjectCompare = a.subject.localeCompare(b.subject);
-      if (subjectCompare !== 0) return subjectCompare;
-      return extractNumber(a.courseNum) - extractNumber(b.courseNum);
-    });
-  
-    setFilteredCourses(sorted);
+    setFilteredCourses(filtered);
   };
 
   // // Helper function to convert time to 24-hour format

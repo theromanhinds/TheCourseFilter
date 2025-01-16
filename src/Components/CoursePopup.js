@@ -5,26 +5,29 @@ function CoursePopup({ popupCourse, closePopup }) {
 
   return (
     <div className="popup-overlay" onClick={closePopup}>
-      <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-        <button className="close-popup" onClick={closePopup}>
-          &times;
-        </button>
-        <h2>{popupCourse.title}</h2>
-        <p>{popupCourse.subject}</p>
-        <p>Instructor: {popupCourse.instructor}</p>
-        <p>Time: {popupCourse.times}</p>
 
-        <p>courseId: {popupCourse.courseId}</p>
-        <p>courseType: {popupCourse.courseType}</p>
-        <p>credits: {popupCourse.credits}</p>
-        <p>days: {popupCourse.days}</p>
-        <p>distSimple: {popupCourse.distSimple}</p>
-        <p>enrolLimit: {popupCourse.enrolLimit}</p>
+      <div className="popup-container" onClick={(e) => e.stopPropagation()}>
+        <div className='popup-header'>
+          <h2>{popupCourse.title}</h2>
+          <button className="close-popup" onClick={closePopup}>
+            &times;
+          </button>
+        </div>
 
-        <p>note: {popupCourse.note}</p>
-        <p>room: {popupCourse.room}</p>
-        <p>subject: {popupCourse.subject}</p>
-        <p>writing: {popupCourse.writing}</p>
+        <div className='popup-content'>
+          <p>{popupCourse.subject} {popupCourse.courseNum}  {popupCourse.distSimple ? `(${popupCourse.distSimple})` : <></>}</p>
+          <p>{popupCourse.days} / {popupCourse.times} / {popupCourse.room}</p>
+
+          <p>{popupCourse.instructor}</p>
+
+          {/* <p>courseId: {popupCourse.courseId}</p> */}
+          {/* <p>courseType: {popupCourse.courseType}</p> */}
+          <p>{popupCourse.credits} credit</p>
+          <p>{popupCourse.enrolLimit ? `Class size: ${popupCourse.enrolLimit}` : 'Class size: Unknown'}</p>
+
+          <p>{popupCourse.note === '0' ? <></> : `Addtional info: ${popupCourse.note}`}</p>
+          <p>{popupCourse.writing === 'W' ? 'Writing Course (W)' : <></>}</p>
+        </div>
       </div>
     </div>
   );
