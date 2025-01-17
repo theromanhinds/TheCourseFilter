@@ -5,7 +5,7 @@ import TimeFilter from '../Filters/TimeFilter';
 import InstructorFilter from '../Filters/InstructorFilter';
 import WritingFilter from '../Filters/WritingFilter';
 import FirstYearFilter from '../Filters/FirstYearFilter';
-import FavoriteFilter from '../Filters/FavoriteFilter';
+// import FavoriteFilter from '../Filters/FavoriteFilter';
 import DayFilter from '../Filters/DayFilter';
 import DistFilter from '../Filters/DistFilter';
 
@@ -24,6 +24,9 @@ function Header() {
         <div className='title-container'>
             <h2>The Course Filter</h2> 
             <h3>{filteredCourses.length} courses</h3>
+            <a className='feedback-link' href="https://forms.gle/v51zKLadq1Mmr7ru5" target="_blank" rel="noreferrer">
+              Feedback
+            </a>
         </div>
 
         <div className='dropdown-filters-container'>
@@ -33,13 +36,13 @@ function Header() {
             <DayFilter/>
             <DistFilter/>
 
-            <div className='dropwdown-filter'>
+            <div className='dropdown-filter'>
               <button className='dropdown-button' onClick={clearFilters}>Clear</button>
             </div>
         </div>
 
         <div className='toggle-filters-container'>
-          <FavoriteFilter/>
+          {/* <FavoriteFilter/> */}
           <WritingFilter/>
           <FirstYearFilter/>
             

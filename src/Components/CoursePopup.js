@@ -15,7 +15,7 @@ function CoursePopup({ popupCourse, closePopup }) {
         </div>
 
         <div className='popup-content'>
-          <p>{popupCourse.subject} {popupCourse.courseNum}  {popupCourse.distSimple ? `(${popupCourse.distSimple})` : <></>}</p>
+          <h3>{popupCourse.subject} {popupCourse.courseNum}  {popupCourse.distSimple ? `(${popupCourse.distSimple})` : <></>}</h3>
           <p>{popupCourse.days} / {popupCourse.times} / {popupCourse.room}</p>
 
           <p>{popupCourse.instructor}</p>

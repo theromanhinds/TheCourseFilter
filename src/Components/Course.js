@@ -15,7 +15,7 @@ function Course({course, displayPopup}) {
     //         <p>{course.distSimple ? course.distSimple : "___"} , {course.writing ? course.writing : "___"}</p>
     //     </div>
     //   </div>
-      
+    
     <div className='course' onClick={displayPopup}>
       <div className='subject-number'>
         <h3>{course.subject ? course.subject : "___"}</h3> 
@@ -33,6 +33,7 @@ function Course({course, displayPopup}) {
         <h3>{course.days ? course.days : "___"}</h3> 
         <p>{course.times ? course.times : "___"}</p>
       </div>
+      {/* <button className='favorite-button'>⭐</button> */}
     </div>
   )
 }
