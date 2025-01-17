@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CourseList from '../Components/CourseList';
 import Header from '../Components/Header';
-import FilterMenu from '../Components/FilterMenu';
+// import FilterMenu from '../Components/FilterMenu';
 
 function Home() {
 
