@@ -131,6 +131,10 @@
   padding-right: 40px;
 }
 
+.mobile-number-of-courses {
+  display:  none;
+}
+
 /* COURSES COURSES COURSES COURSES COURSES */
 
 .course-list {
@@ -748,7 +752,7 @@ width: 25%;
       /* color: #ffd53f; */
     }
 
-    .number-of-courses {
+    .mobile-number-of-courses {
       position: relative;
       height: auto;
       right: 0;
