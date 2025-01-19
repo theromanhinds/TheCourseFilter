@@ -17,6 +17,8 @@ function CourseList({ isFilterMenuOpen, setIsFilterMenuOpen }) {
   return (
     <div className='course-list'>
 
+        <h3 className='number-of-courses'>{filteredCourses.length} courses</h3>
+
         {popupCourse && (
           <CoursePopup 
             popupCourse={popupCourse}

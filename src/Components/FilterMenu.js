@@ -3,6 +3,10 @@ import SubjectFilter from '../Filters/SubjectFilter'
 import { useCourses } from './CourseContext';
 import TimeFilter from '../Filters/TimeFilter';
 import InstructorFilter from '../Filters/InstructorFilter';
+import DayFilter from '../Filters/DayFilter';
+import DistFilter from '../Filters/DistFilter';
+import WritingFilter from '../Filters/WritingFilter';
+import FirstYearFilter from '../Filters/FirstYearFilter';
 
 function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
 
@@ -11,15 +15,25 @@ function FilterMenu({ isFilterMenuOpen, setIsFilterMenuOpen }) {
   return (
     <div className={`filter-menu ${isFilterMenuOpen ? 'open' : ''}`}>
 
-        <button className="filter-menu-toggle" onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
-          <span style={{ marginLeft: '0px' }}>&#9776;</span>
+      <div className='filters-container'>
+        <button className="filter-menu-toggle-button" onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}>
+          <span>&#9776;</span>
         </button>
-        
-        <SubjectFilter/>
-        <TimeFilter/>
-        <InstructorFilter/>
+      <div className='fm-toggle-filters-container'>
+          {/* <FavoriteFilter/> */}
+          <WritingFilter/>
+          <FirstYearFilter/>
+      </div>
+            <SubjectFilter/>
+            <TimeFilter/>
+            <InstructorFilter/>
+            <DayFilter/>
+            <DistFilter/>
 
-          <button onClick={clearFilters}>Clear Filters</button>
+            <div className='dropdown-filter'>
+              <button className='dropdown-button' onClick={clearFilters}>Clear</button>
+            </div>
+          </div>
     </div>
   )
 }
